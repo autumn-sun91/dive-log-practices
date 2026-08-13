@@ -21,3 +21,16 @@ class AutoConfigurationImportSelector
 - @ConditionalOnClass, @ConditionalOnMissingClass
 - @ConditionalOnBean, @ConditionalOnMissingBean
 - @ConditionalOnProperty
+
+## 패키지 모듈 대체
+
+```kotlin
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
+    modules {
+        module("org.springframework.boot:spring-boot-starter-tomcat") {
+            replacedBy("org.springframework.boot:spring-boot-starter-jetty", "모듈대체가능확인")
+        }
+    }
+}
+```
