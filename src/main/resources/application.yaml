@@ -3,8 +3,8 @@ spring:
     active:
       - local
     group:
-      local: "site-local"
-      dev: "site-dev"
+      local: "site-local, db-local"
+      dev: "site-dev, db-dev"
     include:
       - db
       - my-service

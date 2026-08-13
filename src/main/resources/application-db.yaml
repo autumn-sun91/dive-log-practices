@@ -21,7 +21,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: "local"
+      on-profile: "db-local"
 
   jpa:
     show-sql: true
@@ -40,7 +40,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: "dev"
+      on-profile: "db-dev"
 
   jpa:
     hibernate:
