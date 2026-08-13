@@ -34,3 +34,11 @@ dependencies {
     }
 }
 ```
+
+## Spring Programming Model
+
+- DI
+- PSA(Portable Service Abstraction): Enterprise 기술을 환경에 관계없이 일관된 방식으로 접근 가능
+- AOP
+- POJO(Core): 순수객체를 이용하여 비즈니스 로직 작성
+- (+설계정보) = Spring Application
