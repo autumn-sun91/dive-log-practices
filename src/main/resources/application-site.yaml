@@ -1,0 +1,23 @@
+site:
+  author-name: thk
+  author-email: dpwe231@gmail.com
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "site-local"
+
+site:
+  author-name: thk.local
+  author-email: dpwe231.local@gmail.com
+
+---
+spring:
+  config:
+    activate:
+      on-profile: "site-dev"
+
+site:
+  author-name: thk.dev
+  author-email: dpwe231.devl@gmail.com

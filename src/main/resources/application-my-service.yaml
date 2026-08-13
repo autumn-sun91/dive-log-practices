@@ -1,0 +1,13 @@
+my.service:
+  enabled: false
+  remote-address: 192.168.0.1
+  security:
+    username: thk
+    password: 123
+    roles:
+      - ADMIN
+      - USER
+    attr:
+      hasWriteAuthority: false
+      hasReadAuthority: true
+      hasDeleteAuthority: false
