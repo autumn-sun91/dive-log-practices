@@ -9,3 +9,16 @@ spring:
       - db
       - my-service
       - site
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+          - "*"
+        exclude:
+          - health # 사용되고 있는 인디케이터가 활성화가 되고 나서 활성화가 되므로 별도 HealthController 를 만들어서 제공
+      discovery:
+        enabled: true
+  endpoint:
+    info:
+      access: NONE
