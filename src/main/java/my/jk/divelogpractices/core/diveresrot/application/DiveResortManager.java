@@ -1,5 +1,6 @@
 package my.jk.divelogpractices.core.diveresrot.application;
 
+import my.jk.divelogpractices.common.log.Trace;
 import my.jk.divelogpractices.core.diveresrot.application.dto.DiveResortDto;
 import my.jk.divelogpractices.core.diveresrot.application.dto.DiveResortRegisterCommand;
 import my.jk.divelogpractices.core.diveresrot.application.dto.DiveResortUpdateCommand;
@@ -22,6 +23,7 @@ public class DiveResortManager implements DiveResortFinder, DiveResortEditor {
         this.repository = repository;
     }
 
+    @Trace(enableArguments = true, enableReturnValue = true)
     @Transactional(readOnly = true) // transactionRouting Datasource - db replica
     @Override
     public List<DiveResortDto> findAll() {

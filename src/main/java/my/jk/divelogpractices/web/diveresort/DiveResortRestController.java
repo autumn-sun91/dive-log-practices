@@ -1,5 +1,6 @@
 package my.jk.divelogpractices.web.diveresort;
 
+import my.jk.divelogpractices.common.log.WebTrace;
 import my.jk.divelogpractices.core.diveresrot.application.DiveResortEditor;
 import my.jk.divelogpractices.core.diveresrot.application.DiveResortFinder;
 import my.jk.divelogpractices.core.diveresrot.application.dto.DiveResortDto;
@@ -29,11 +30,13 @@ public class DiveResortRestController {
         this.diveResortEditor = diveResortEditor;
     }
 
+    @WebTrace(apiName = "다이브리조트 조회")
     @GetMapping("/dive-resorts")
     public ResponseEntity<List<DiveResortDto>> findAll() {
         return ResponseEntity.ok(diveResortFinder.findAll());
     }
 
+    @WebTrace(apiName = "다이브리조트 등록", enableRequestBody = true)
     @PostMapping("/dive-resorts")
     public ResponseEntity<?> register(@RequestBody @Validated DiveResortRegisterRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
