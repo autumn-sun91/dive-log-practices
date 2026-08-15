@@ -17,7 +17,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public class AppLogConfig {
 
     @Bean
-    public TraceInfoManager<WebTraceLog>  traceInfoManager() {
+    public TraceInfoManager<WebTraceLog> traceInfoManager() {
         return new TraceInfoManager<>(WebTraceLog::new);
     }
 
@@ -25,9 +25,8 @@ public class AppLogConfig {
     public Advisor traceLogAdvisor() {
         return new TraceLogAdvisorBuilder<WebTraceLog>()
                 .traceInfoManager(traceInfoManager())
-                .traceLogPointcutExpression(
-                        "execution(* my.jk.divelogpractices..*Controller.*(..)) "
-                                + "|| execution(* my.jk.divelogpractices..*Manager.*(..))")
+                .traceLogPointcutExpression("execution(* my.jk.divelogpractices..*Controller.*(..)) "
+                        + "|| execution(* my.jk.divelogpractices..*Manager.*(..))")
                 .build();
     }
 
@@ -35,9 +34,11 @@ public class AppLogConfig {
     public FilterRegistrationBean<WebTraceLogFilter<WebTraceLog>> webTransactionLogFilter(
             RequestMappingHandlerMapping requestMappingHandlerMapping) {
 
-        return new WebTraceLogFilterBeanBuilder<WebTraceLog>().traceInfoManager(traceInfoManager())
+        return new WebTraceLogFilterBeanBuilder<WebTraceLog>()
+                .traceInfoManager(traceInfoManager())
                 .urlPatterns("/dive-resorts/*", "/dive-points/*", "/dive-logs/*")
                 .webTraceLogLoader(new DefaultWebTraceMethodInvoker(requestMappingHandlerMapping))
-                .applyOrder(Ordered.HIGHEST_PRECEDENCE).build();
+                .applyOrder(Ordered.HIGHEST_PRECEDENCE)
+                .build();
     }
 }

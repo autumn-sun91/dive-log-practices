@@ -1,19 +1,17 @@
 package my.jk.divelogpractices.core.diveresrot.application.dto;
 
+import java.time.LocalDateTime;
 import my.jk.divelogpractices.core.diveresrot.domain.DiveResort;
 
-import java.time.LocalDateTime;
-
-public record DiveResortDto (
+public record DiveResortDto(
         Long id,
         String name,
         String address,
         String ownerName,
-         String contactNumber,
-         String description,
+        String contactNumber,
+        String description,
         LocalDateTime createdDateTime,
-         LocalDateTime lastModifiedDateTime
-) {
+        LocalDateTime lastModifiedDateTime) {
 
     public static DiveResortDto ofEntity(DiveResort diveResort) {
         return new DiveResortDto(
@@ -24,7 +22,6 @@ public record DiveResortDto (
                 diveResort.getContactNumber(),
                 diveResort.getDescription(),
                 diveResort.getCreatedDateTime(),
-                diveResort.getLastModifiedDateTime()
-        );
+                diveResort.getLastModifiedDateTime());
     }
 }

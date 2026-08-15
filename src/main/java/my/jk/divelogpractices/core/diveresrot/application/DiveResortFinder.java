@@ -1,9 +1,8 @@
 package my.jk.divelogpractices.core.diveresrot.application;
 
-import my.jk.divelogpractices.core.diveresrot.application.dto.DiveResortDto;
-
 import java.util.List;
 import java.util.Optional;
+import my.jk.divelogpractices.core.diveresrot.application.dto.DiveResortDto;
 
 public interface DiveResortFinder {
     /**

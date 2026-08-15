@@ -1,19 +1,12 @@
 package my.jk.divelogpractices.core.diveresrot.application.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import my.jk.divelogpractices.core.diveresrot.domain.DiveResort;
 
 public record DiveResortRegisterCommand(
-        String name,
-        String ownerName,
-        String contactNumber,
-        String address,
-        String description
-) {
-    public static DiveResortRegisterCommand create(String name, String ownerName, String contactNumber, String address,
-                                                   String description) {
-        return new DiveResortRegisterCommand(
-                name, ownerName, contactNumber, address, description);
+        String name, String ownerName, String contactNumber, String address, String description) {
+    public static DiveResortRegisterCommand create(
+            String name, String ownerName, String contactNumber, String address, String description) {
+        return new DiveResortRegisterCommand(name, ownerName, contactNumber, address, description);
     }
 
     public DiveResort convertToEntity() {
