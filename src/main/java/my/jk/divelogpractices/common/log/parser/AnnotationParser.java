@@ -1,6 +1,5 @@
 package my.jk.divelogpractices.common.log.parser;
 
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 

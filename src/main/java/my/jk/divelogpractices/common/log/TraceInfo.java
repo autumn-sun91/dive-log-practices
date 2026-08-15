@@ -1,10 +1,9 @@
 package my.jk.divelogpractices.common.log;
 
-import lombok.Getter;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.Getter;
 
 @Getter
 public class TraceInfo<T extends TraceLog> {
@@ -35,7 +34,7 @@ public class TraceInfo<T extends TraceLog> {
     }
 
     public int getTraceDuration() {
-        return (int)(System.currentTimeMillis() - requestTimeList.get(logDepth));
+        return (int) (System.currentTimeMillis() - requestTimeList.get(logDepth));
     }
 
     public boolean isRootLogDepth() {

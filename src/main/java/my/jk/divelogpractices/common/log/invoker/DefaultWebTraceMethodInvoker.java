@@ -1,6 +1,9 @@
 package my.jk.divelogpractices.common.log.invoker;
 
 import jakarta.servlet.http.HttpServletRequest;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import my.jk.divelogpractices.common.log.WebTrace;
@@ -10,13 +13,9 @@ import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import org.springframework.web.util.ServletRequestPathUtils;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.util.Objects;
-
 @Slf4j
 @RequiredArgsConstructor
-public class DefaultWebTraceMethodInvoker implements WebTraceMethodInvoker  {
+public class DefaultWebTraceMethodInvoker implements WebTraceMethodInvoker {
     private static final WebTrace DEFAULT_TRACE_WEB_LOG = new WebTrace() {
         @Override
         public Class<? extends Annotation> annotationType() {

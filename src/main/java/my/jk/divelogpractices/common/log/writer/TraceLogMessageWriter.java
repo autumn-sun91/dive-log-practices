@@ -7,9 +7,18 @@ public interface TraceLogMessageWriter {
 
     String generateRequestLogMessage(int logDepth, String invocationCommonMessage);
 
-    String generateReturnLogMessage(int logDepth, String invocationCommonMessage, MethodInvocation invocation,
-                                    Object returnValue, int duration, boolean enableReturnValue);
+    String generateReturnLogMessage(
+            int logDepth,
+            String invocationCommonMessage,
+            MethodInvocation invocation,
+            Object returnValue,
+            int duration,
+            boolean enableReturnValue);
 
-    String generateErrorLogMessage(int logDepth, String invocationCommonMessage, MethodInvocation invocation,
-                                   Throwable throwable, int duration);
+    String generateErrorLogMessage(
+            int logDepth,
+            String invocationCommonMessage,
+            MethodInvocation invocation,
+            Throwable throwable,
+            int duration);
 }

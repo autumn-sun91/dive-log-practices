@@ -1,10 +1,8 @@
 package my.jk.divelogpractices.common.log.invoker;
 
 import jakarta.servlet.http.HttpServletRequest;
-import my.jk.divelogpractices.common.log.Trace;
-import my.jk.divelogpractices.common.log.WebTrace;
-
 import java.lang.reflect.Method;
+import my.jk.divelogpractices.common.log.WebTrace;
 
 public interface WebTraceMethodInvoker {
 

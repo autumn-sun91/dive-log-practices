@@ -1,17 +1,15 @@
 package my.jk.divelogpractices.common.log.writer;
 
-import my.jk.divelogpractices.common.log.WebTraceLog;
-
 import java.util.Objects;
+import my.jk.divelogpractices.common.log.WebTraceLog;
 
 public class DefaultWebTraceLogMessageWriter implements WebTraceLogMessageWriter {
 
     @Override
     public String generateRequestLog(WebTraceLog transactionLog) {
-        String message = String.format("[REQ] host=%s, method=%s, url=%s",
-                transactionLog.getRemoteAddress(),
-                transactionLog.getHttpMethod(),
-                transactionLog.toRequestUrl());
+        String message = String.format(
+                "[REQ] host=%s, method=%s, url=%s",
+                transactionLog.getRemoteAddress(), transactionLog.getHttpMethod(), transactionLog.toRequestUrl());
 
         if (Objects.nonNull(transactionLog.getRequestBody())) {
             message += ", body=" + transactionLog.getRequestBody();
@@ -22,7 +20,8 @@ public class DefaultWebTraceLogMessageWriter implements WebTraceLogMessageWriter
 
     @Override
     public String generateResponseLog(WebTraceLog transactionLog) {
-        String message = String.format("[RES] host=%s, method=%s, url=%s, status=%s",
+        String message = String.format(
+                "[RES] host=%s, method=%s, url=%s, status=%s",
                 transactionLog.getRemoteAddress(),
                 transactionLog.getHttpMethod(),
                 transactionLog.toRequestUrl(),
@@ -38,5 +37,4 @@ public class DefaultWebTraceLogMessageWriter implements WebTraceLogMessageWriter
 
         return message;
     }
-
 }

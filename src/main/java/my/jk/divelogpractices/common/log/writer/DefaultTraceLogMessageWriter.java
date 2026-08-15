@@ -1,12 +1,11 @@
 package my.jk.divelogpractices.common.log.writer;
 
-import org.aopalliance.intercept.MethodInvocation;
-
 import java.lang.reflect.Array;
 import java.lang.reflect.Parameter;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import org.aopalliance.intercept.MethodInvocation;
 
 public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
 
@@ -14,7 +13,8 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
     public String generateInvocationCommonMessage(MethodInvocation invocation, boolean enableDetailLog) {
         String simpleClassName = invocation.getMethod().getDeclaringClass().getSimpleName();
         String methodName = invocation.getMethod().getName();
-        return String.format("%s.%s(%s)", simpleClassName, methodName, generateArgumentsLog(invocation, enableDetailLog));
+        return String.format(
+                "%s.%s(%s)", simpleClassName, methodName, generateArgumentsLog(invocation, enableDetailLog));
     }
 
     @Override
@@ -25,8 +25,13 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
     }
 
     @Override
-    public String generateReturnLogMessage(int logDepth, String invocationCommonMessage, MethodInvocation invocation,
-                                           Object returnValue, int duration, boolean enableReturnValue) {
+    public String generateReturnLogMessage(
+            int logDepth,
+            String invocationCommonMessage,
+            MethodInvocation invocation,
+            Object returnValue,
+            int duration,
+            boolean enableReturnValue) {
         return generateLogBuilder(logDepth, "|< ", "|<-- ")
                 .append(invocationCommonMessage)
                 .append(" ")
@@ -35,11 +40,15 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
     }
 
     @Override
-    public String generateErrorLogMessage(int logDepth, String invocationCommonMessage, MethodInvocation invocation,
-                                          Throwable throwable, int duration) {
+    public String generateErrorLogMessage(
+            int logDepth,
+            String invocationCommonMessage,
+            MethodInvocation invocation,
+            Throwable throwable,
+            int duration) {
         return generateLogBuilder(logDepth, "|X ", "|<X- ")
                 .append(invocationCommonMessage)
-                .append(" thrown " )
+                .append(" thrown ")
                 .append(generateReturnValueLog(invocation, throwable, duration, true))
                 .toString();
     }
@@ -62,7 +71,7 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
         Object[] arguments = invocation.getArguments();
         StringBuilder messages = new StringBuilder();
         int parameterSize = parameters.length;
-        for(int i=0; i<parameterSize; i++) {
+        for (int i = 0; i < parameterSize; i++) {
             if (i > 0) {
                 messages.append(", ");
             }
@@ -84,7 +93,8 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
     }
 
     @SuppressWarnings("rawtypes")
-    protected String generateReturnValueLog(MethodInvocation invocation, Object returnValue, int duration, boolean enableDetailLog) {
+    protected String generateReturnValueLog(
+            MethodInvocation invocation, Object returnValue, int duration, boolean enableDetailLog) {
         Class returnType = invocation.getMethod().getReturnType();
         String returnLogMessage;
         if (returnType == void.class) {
@@ -104,18 +114,18 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
             return null;
         }
         if (List.class.isAssignableFrom(value.getClass())) {
-            List list = (List)value;
+            List list = (List) value;
             if (list.size() > 1) {
                 return String.format("[%s, ... (size: %,d)]", list.get(0), list.size());
             } else {
                 return list.toString();
             }
         } else if (Collection.class.isAssignableFrom(value.getClass())) {
-            return String.format("collection(size: %,d)", ((Collection)value).size());
+            return String.format("collection(size: %,d)", ((Collection) value).size());
         } else if (value.getClass().isArray()) {
             return String.format("array[length: %,d]", Array.getLength(value));
         } else if (Map.class.isAssignableFrom(value.getClass())) {
-            return String.format("map[size: %,d]", ((Map)value).size());
+            return String.format("map[size: %,d]", ((Map) value).size());
         } else {
             String logMessage = value.toString();
             if (logMessage == null) {
@@ -136,11 +146,11 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
         }
         Class valueType = value.getClass();
         if (Collection.class.isAssignableFrom(valueType)) {
-            return String.format("%s[size: %,d]", valueType.getSimpleName(), ((Collection)value).size());
+            return String.format("%s[size: %,d]", valueType.getSimpleName(), ((Collection) value).size());
         } else if (valueType.isArray()) {
             return String.format("array[length: %,d]", Array.getLength(value));
         } else if (Map.class.isAssignableFrom(value.getClass())) {
-            return String.format("map[size: %,d]", ((Map)value).size());
+            return String.format("map[size: %,d]", ((Map) value).size());
         } else if (isSimpleType(value.getClass())) {
             return value.toString();
         } else if (String.class.isAssignableFrom(valueType)) {
@@ -152,7 +162,9 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
 
     @SuppressWarnings("rawtypes")
     protected boolean isSimpleType(Class type) {
-        return Boolean.class.equals(type) || Number.class.isAssignableFrom(type) || CharSequence.class.isAssignableFrom(type);
+        return Boolean.class.equals(type)
+                || Number.class.isAssignableFrom(type)
+                || CharSequence.class.isAssignableFrom(type);
     }
 
     protected String formatSimpleStringValue(String value) {
@@ -163,5 +175,4 @@ public class DefaultTraceLogMessageWriter implements TraceLogMessageWriter {
             return value.substring(0, MAX_ARGUMENT_VALUE_LENGTH) + " ...";
         }
     }
-
 }

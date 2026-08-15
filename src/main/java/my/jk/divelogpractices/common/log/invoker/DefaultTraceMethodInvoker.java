@@ -1,16 +1,15 @@
 package my.jk.divelogpractices.common.log.invoker;
 
-import my.jk.divelogpractices.common.log.Trace;
+import static my.jk.divelogpractices.common.log.parser.AnnotationParser.parseAnnotation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static my.jk.divelogpractices.common.log.parser.AnnotationParser.parseAnnotation;
+import my.jk.divelogpractices.common.log.Trace;
 
 public class DefaultTraceMethodInvoker implements TraceMethodInvoker {
-    private static final Trace DEFAULT_TRACE_LOG = new Trace(){
+    private static final Trace DEFAULT_TRACE_LOG = new Trace() {
         @Override
         public Class<? extends Annotation> annotationType() {
             return Trace.class;
@@ -20,10 +19,12 @@ public class DefaultTraceMethodInvoker implements TraceMethodInvoker {
         public boolean enableTraceLog() {
             return true;
         }
+
         @Override
         public boolean enableArguments() {
             return false;
         }
+
         @Override
         public boolean enableReturnValue() {
             return false;

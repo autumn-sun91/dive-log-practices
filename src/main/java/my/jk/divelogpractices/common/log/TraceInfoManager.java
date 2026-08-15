@@ -1,13 +1,12 @@
 package my.jk.divelogpractices.common.log;
 
-import org.slf4j.MDC;
+import static java.util.Objects.nonNull;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
-
-import static java.util.Objects.nonNull;
+import org.slf4j.MDC;
 
 public class TraceInfoManager<T extends TraceLog> {
     private static final String MDC_TRACE_ID = "TID";

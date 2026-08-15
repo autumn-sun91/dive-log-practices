@@ -1,12 +1,11 @@
 package my.jk.divelogpractices.common.log;
 
-import lombok.Getter;
-import lombok.Setter;
+import static java.time.format.DateTimeFormatter.ofPattern;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-
-import static java.time.format.DateTimeFormatter.ofPattern;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter

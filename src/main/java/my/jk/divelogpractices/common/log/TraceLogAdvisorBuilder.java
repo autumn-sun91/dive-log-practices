@@ -1,5 +1,7 @@
 package my.jk.divelogpractices.common.log;
 
+import static java.util.Objects.nonNull;
+
 import my.jk.divelogpractices.common.log.invoker.DefaultTraceMethodInvoker;
 import my.jk.divelogpractices.common.log.invoker.TraceMethodInvoker;
 import my.jk.divelogpractices.common.log.writer.DefaultTraceLogMessageWriter;
@@ -12,8 +14,6 @@ import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.annotation.AnnotationMatchingPointcut;
 import org.springframework.core.Ordered;
 import org.springframework.util.Assert;
-
-import static java.util.Objects.nonNull;
 
 public class TraceLogAdvisorBuilder<T extends TraceLog> {
 
@@ -63,16 +63,14 @@ public class TraceLogAdvisorBuilder<T extends TraceLog> {
         ComposablePointcut pointcut = new ComposablePointcut(new AnnotationMatchingPointcut(Trace.class));
         pointcut.union(new AnnotationMatchingPointcut(null, Trace.class));
 
-        if(nonNull(traceLogMessageWriter)) {
+        if (nonNull(traceLogMessageWriter)) {
             AspectJExpressionPointcut expressionPointcut = new AspectJExpressionPointcut();
             expressionPointcut.setExpression(traceLogPointcutExpression);
             pointcut.union((Pointcut) expressionPointcut);
         }
 
-        TraceLogMethodInterceptor<T> methodInterceptor = new TraceLogMethodInterceptor<>(
-                traceInfoManager,
-                traceMethodInvoker,
-                traceLogMessageWriter);
+        TraceLogMethodInterceptor<T> methodInterceptor =
+                new TraceLogMethodInterceptor<>(traceInfoManager, traceMethodInvoker, traceLogMessageWriter);
 
         DefaultPointcutAdvisor pointcutAdvisor = new DefaultPointcutAdvisor(pointcut, methodInterceptor);
         pointcutAdvisor.setOrder(applyOrder);

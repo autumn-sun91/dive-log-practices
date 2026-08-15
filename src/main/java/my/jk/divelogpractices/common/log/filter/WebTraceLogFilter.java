@@ -1,5 +1,7 @@
 package my.jk.divelogpractices.common.log.filter;
 
+import static java.util.Objects.nonNull;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
@@ -9,6 +11,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Method;
+import java.time.format.DateTimeFormatter;
 import my.jk.divelogpractices.common.log.*;
 import my.jk.divelogpractices.common.log.invoker.WebTraceMethodInvoker;
 import my.jk.divelogpractices.common.log.writer.WebTraceLogMessageWriter;
@@ -19,12 +24,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 
-import java.io.IOException;
-import java.lang.reflect.Method;
-import java.time.format.DateTimeFormatter;
-
-import static java.util.Objects.nonNull;
-
 public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilter {
 
     private static final String LOGGER_NAME_TRACE_PREFIX = "TRACE.WEB.";
@@ -33,8 +32,10 @@ public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilt
     private static final int RESPONSE_CONTENT_CACHE_LIMIT = 8 * 1024;
 
     private final Logger transactionLogger = LoggerFactory.getLogger(LOGGER_NAME_TRANSACTION);
-    private final ObjectMapper objectMapper = JsonMapper.builder().addModule(new JavaTimeModule().addSerializer(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")))).build();
-
+    private final ObjectMapper objectMapper = JsonMapper.builder()
+            .addModule(new JavaTimeModule()
+                    .addSerializer(new LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"))))
+            .build();
 
     private final TraceInfoManager<T> traceInfoManager;
     private final WebTraceMethodInvoker webTraceLogLoader;
@@ -50,7 +51,8 @@ public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilt
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         FilterChainExecutor executor = () -> filterChain.doFilter(request, response);
 
@@ -59,20 +61,21 @@ public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilt
             WebTrace webTraceLog = webTraceLogLoader.getWebTrace(apiMethod);
 
             if (webTraceLog.enableWebTraceLog()) {
-                String loggerName = LOGGER_NAME_TRACE_PREFIX + apiMethod.getDeclaringClass().getName();
+                String loggerName =
+                        LOGGER_NAME_TRACE_PREFIX + apiMethod.getDeclaringClass().getName();
                 Logger logger = LoggerFactory.getLogger(loggerName);
 
                 if (logger.isInfoEnabled() || logger.isDebugEnabled()) {
-                    ContentCachingRequestWrapper requestWrapper = new ContentCachingRequestWrapper(request,
-                            REQUEST_CONTENT_CACHE_LIMIT);
+                    ContentCachingRequestWrapper requestWrapper =
+                            new ContentCachingRequestWrapper(request, REQUEST_CONTENT_CACHE_LIMIT);
                     ContentCachingResponseWrapper responseWrapper = new ContentCachingResponseWrapper(response);
 
                     if (logger.isDebugEnabled()) {
-                        executor = () -> doFilterInternalAndLogging(webTraceLog, filterChain, requestWrapper,
-                                responseWrapper, logger);
+                        executor = () -> doFilterInternalAndLogging(
+                                webTraceLog, filterChain, requestWrapper, responseWrapper, logger);
                     } else {
-                        executor = () -> doFilterInternalWithTransactionLog(webTraceLog, filterChain, requestWrapper,
-                                responseWrapper);
+                        executor = () -> doFilterInternalWithTransactionLog(
+                                webTraceLog, filterChain, requestWrapper, responseWrapper);
                     }
                 }
             }
@@ -80,8 +83,12 @@ public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilt
         executor.execute();
     }
 
-    private void doFilterInternalAndLogging(WebTrace webTraceLog, FilterChain filterChain,
-                                            ContentCachingRequestWrapper request, ContentCachingResponseWrapper response, Logger logger)
+    private void doFilterInternalAndLogging(
+            WebTrace webTraceLog,
+            FilterChain filterChain,
+            ContentCachingRequestWrapper request,
+            ContentCachingResponseWrapper response,
+            Logger logger)
             throws ServletException, IOException {
 
         TraceInfo<T> traceInfo = traceInfoManager.startLog();
@@ -105,8 +112,11 @@ public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilt
         }
     }
 
-    private void doFilterInternalWithTransactionLog(WebTrace webTraceLog, FilterChain filterChain,
-                                                    ContentCachingRequestWrapper request, ContentCachingResponseWrapper response)
+    private void doFilterInternalWithTransactionLog(
+            WebTrace webTraceLog,
+            FilterChain filterChain,
+            ContentCachingRequestWrapper request,
+            ContentCachingResponseWrapper response)
             throws ServletException, IOException {
         TraceInfo<T> traceInfo = traceInfoManager.startLog();
 
@@ -125,8 +135,8 @@ public class WebTraceLogFilter<T extends WebTraceLog> extends OncePerRequestFilt
         }
     }
 
-    private void saveWebRequestLogInfo(T transactionLog, HttpServletRequest request, boolean enableRequestBodyLog,
-                                       String apiName) {
+    private void saveWebRequestLogInfo(
+            T transactionLog, HttpServletRequest request, boolean enableRequestBodyLog, String apiName) {
         transactionLog.setRequestBody(getRequestBody(request, enableRequestBodyLog));
         transactionLog.setRemoteAddress(request.getRemoteAddr());
         transactionLog.setForwarded(request.getHeader("X-Forwarded-For"));

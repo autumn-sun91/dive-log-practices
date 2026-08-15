@@ -17,23 +17,27 @@ public class WebTraceLogFilterBeanBuilder<T extends WebTraceLog> {
     private WebTraceLogMessageWriter webTraceLogMessageGenerator;
     private Integer applyOrder;
 
-
     public WebTraceLogFilterBeanBuilder<T> urlPatterns(String... urlPatterns) {
         this.urlPatterns = urlPatterns;
         return this;
     }
+
     public WebTraceLogFilterBeanBuilder<T> traceInfoManager(TraceInfoManager<T> traceInfoManager) {
         this.traceInfoManager = traceInfoManager;
         return this;
     }
+
     public WebTraceLogFilterBeanBuilder<T> webTraceLogLoader(WebTraceMethodInvoker webTraceLogLoader) {
         this.webTraceMethodInvoker = webTraceLogLoader;
         return this;
     }
-    public WebTraceLogFilterBeanBuilder<T> webTraceLogMessageGenerator(WebTraceLogMessageWriter webTraceLogMessageWriter) {
+
+    public WebTraceLogFilterBeanBuilder<T> webTraceLogMessageGenerator(
+            WebTraceLogMessageWriter webTraceLogMessageWriter) {
         this.webTraceLogMessageGenerator = webTraceLogMessageWriter;
         return this;
     }
+
     public WebTraceLogFilterBeanBuilder<T> applyOrder(int applyOrder) {
         this.applyOrder = applyOrder;
         return this;
@@ -51,8 +55,8 @@ public class WebTraceLogFilterBeanBuilder<T extends WebTraceLog> {
             applyOrder = Ordered.HIGHEST_PRECEDENCE;
         }
 
-        WebTraceLogFilter<T> webTraceLogFilter = new WebTraceLogFilter<>(
-                traceInfoManager, webTraceMethodInvoker, webTraceLogMessageGenerator);
+        WebTraceLogFilter<T> webTraceLogFilter =
+                new WebTraceLogFilter<>(traceInfoManager, webTraceMethodInvoker, webTraceLogMessageGenerator);
 
         FilterRegistrationBean<WebTraceLogFilter<T>> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(webTraceLogFilter);
@@ -61,5 +65,4 @@ public class WebTraceLogFilterBeanBuilder<T extends WebTraceLog> {
 
         return filterRegistrationBean;
     }
-
 }

@@ -7,6 +7,8 @@ import java.lang.annotation.*;
 @Documented
 public @interface Trace {
     boolean enableTraceLog() default true;
+
     boolean enableArguments() default false;
+
     boolean enableReturnValue() default false;
 }

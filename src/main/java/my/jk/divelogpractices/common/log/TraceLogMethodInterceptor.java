@@ -30,7 +30,8 @@ public class TraceLogMethodInterceptor<T extends TraceLog> implements MethodInte
         Trace traceLog = traceLogLoader.getTraceLog(invocation.getMethod());
         MethodInvocationExecutor executor = invocation::proceed;
         if (traceLog.enableTraceLog()) {
-            String loggerName = LOGGER_NAME_PREFIX + invocation.getMethod().getDeclaringClass().getName();
+            String loggerName = LOGGER_NAME_PREFIX
+                    + invocation.getMethod().getDeclaringClass().getName();
             Logger logger = LoggerFactory.getLogger(loggerName);
             if (logger.isDebugEnabled()) {
                 executor = () -> invokeAndLogging(traceLog, logger, invocation);
@@ -41,19 +42,24 @@ public class TraceLogMethodInterceptor<T extends TraceLog> implements MethodInte
 
     private Object invokeAndLogging(Trace traceLog, Logger logger, MethodInvocation invocation) throws Throwable {
         TraceInfo<T> traceInfo = traceInfoManager.startLog();
-        String commonMessage = logMessageGenerator.generateInvocationCommonMessage(invocation,
-                traceLog.enableArguments());
+        String commonMessage =
+                logMessageGenerator.generateInvocationCommonMessage(invocation, traceLog.enableArguments());
         logger.debug(logMessageGenerator.generateRequestLogMessage(traceInfo.getLogDepth(), commonMessage));
         try {
             Object returnValue = invocation.proceed();
 
-            logger.debug(logMessageGenerator.generateReturnLogMessage(traceInfo.getLogDepth(), commonMessage,
-                    invocation, returnValue, traceInfo.getTraceDuration(), traceLog.enableReturnValue()));
+            logger.debug(logMessageGenerator.generateReturnLogMessage(
+                    traceInfo.getLogDepth(),
+                    commonMessage,
+                    invocation,
+                    returnValue,
+                    traceInfo.getTraceDuration(),
+                    traceLog.enableReturnValue()));
 
             return returnValue;
         } catch (Throwable ex) {
-            logger.debug(logMessageGenerator.generateErrorLogMessage(traceInfo.getLogDepth(), commonMessage, invocation,
-                    ex, traceInfo.getTraceDuration()));
+            logger.debug(logMessageGenerator.generateErrorLogMessage(
+                    traceInfo.getLogDepth(), commonMessage, invocation, ex, traceInfo.getTraceDuration()));
 
             throw ex;
         } finally {
